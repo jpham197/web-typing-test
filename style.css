@@ -1,0 +1,19 @@
+body {
+    font-family: Helvetica, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+}
+
+.feedback {
+    margin: 2em 0;
+}
+
+p {
+    margin: 0;
+    overflow-wrap: break-word;
+}
+
+span {
+    display: block;
+}
