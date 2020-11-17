@@ -1,6 +1,7 @@
-let localPhrases = originalPhrases;
+  let localPhrases = originalPhrases;
 let userInput = document.getElementsByClassName("user-input")[0];
 let viewPhrase = document.getElementsByClassName("phrase")[0];
+let restartButton = document.getElementsByClassName("btn");
 let startTime = null;
 
 const loadNewPhrase = () => {
@@ -14,7 +15,7 @@ const calcAccuracy = () => {
 }
 
 const calcSpeed = () => {
-    
+
 }
 
 const submitInput = (startTime, userInput) => {
@@ -26,6 +27,13 @@ const submitInput = (startTime, userInput) => {
 }
 
 loadNewPhrase();
+
+
+function restartFunc() {
+  console.log("Restarting");
+  loadNewPhrase();
+  userInput.innerHTML = "";
+}
 
 window.addEventListener("keydown", (event) => {
     //Start timer
@@ -55,4 +63,3 @@ window.addEventListener("keydown", (event) => {
             break;
     }
 });
-
