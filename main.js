@@ -57,6 +57,8 @@ window.addEventListener("keydown", (event) => {
             break;
         case "Control":
             break;
+        case "Alt":
+            break;
         default:
             if (userInput.innerHTML.length < viewPhrase.innerHTML.length) {
                 userInput.innerHTML += event.key;
