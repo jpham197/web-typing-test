@@ -1,6 +1,8 @@
 let localPhrases = originalPhrases;
 let userInput = document.getElementsByClassName("user-input")[0];
 let viewPhrase = document.getElementsByClassName("phrase")[0];
+let speedView = document.getElementsByClassName("speed")[0];
+let accuracyView = document.getElementsByClassName("accuracy")[0];
 let startTime = null;
 
 const loadNewPhrase = () => {
@@ -20,8 +22,11 @@ const calcSpeed = () => {
 const submitInput = (startTime, userInput) => {
     console.log(startTime)
     const endTime = new Date();
-    const totalTime = endTime.getTime() - startTime.getTime();
-    console.log(totalTime)
+    const totalTime = ((endTime.getTime() - startTime.getTime()) / 1000) / 60; //total time in minutes
+    const wordsTyped = userInput.innerHTML.split(" ").length;
+    const speed = wordsTyped / totalTime;
+    speedView.innerHTML = speed;
+    console.log(speed);
     return totalTime;
 }
 
