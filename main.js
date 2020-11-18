@@ -25,7 +25,7 @@ const submitInput = (startTime, userInput) => {
     const totalTime = ((endTime.getTime() - startTime.getTime()) / 1000) / 60; //total time in minutes
     const wordsTyped = userInput.innerHTML.split(" ").length;
     const speed = wordsTyped / totalTime;
-    speedView.innerHTML = speed;
+    speedView.innerHTML = `Speed: ${Math.floor(speed)} wpm`;
     console.log(speed);
     return totalTime;
 }
@@ -39,9 +39,11 @@ window.addEventListener("keydown", (event) => {
     }
     switch (event.key) {
         case "Enter":
-            submitInput(startTime, userInput);
-            loadNewPhrase();
-            userInput.innerHTML = "";
+            if (userInput.innerHTML.length == viewPhrase.innerHTML.length) {
+                submitInput(startTime, userInput);
+                loadNewPhrase();
+                userInput.innerHTML = "";
+            }
             break;
         case "Escape":
             userInput.innerHTML = "";
@@ -56,7 +58,9 @@ window.addEventListener("keydown", (event) => {
         case "Control":
             break;
         default:
-            userInput.innerHTML += event.key;
+            if (userInput.innerHTML.length < viewPhrase.innerHTML.length) {
+                userInput.innerHTML += event.key;
+            }
             break;
     }
 });
