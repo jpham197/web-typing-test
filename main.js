@@ -1,10 +1,13 @@
 let localPhrases = originalPhrases;
 let userInput = document.getElementsByClassName("user-input")[0];
 let viewPhrase = document.getElementsByClassName("phrase")[0];
-let speedView = document.getElementsByClassName("speed")[0];
-let accuracyView = document.getElementsByClassName("accuracy")[0];
+let previous = document.getElementsByClassName("previous")[0];
+let total = document.getElementsByClassName("total")[0];
 let startTime = null;
-let backspaceCount = 0;
+let IF = 0; //backspaced characters
+let totalSpeed = 0;
+let totalAccuracy = 0;
+let phraseCount = 0;
 
 const loadNewPhrase = () => {
     let randomIndex = Math.random() * localPhrases.length;
@@ -13,34 +16,51 @@ const loadNewPhrase = () => {
 }
 
 const calcAccuracy = (userInput) => {
-    let incorrectChar = 0;
+    let INF = 0;
+    let C = 0;
     for (let i = 0; i < userInput.innerHTML.length; i++) {
         if (userInput.innerHTML[i] !== viewPhrase.innerHTML[i]) {
-            incorrectChar++;
+            INF++;
+        } else {
+            C++;
         }
     }
-    console.log(incorrectChar + backspaceCount);
-    const errorRate = incorrectChar + backspaceCount;
-    const accuracy = Math.floor(((userInput.innerHTML.length - errorRate) / viewPhrase.innerHTML.length) * 100);
-    accuracyView.innerHTML = `Accuracy: ${accuracy}%`;
+    const errorRate = (INF + IF) / (INF + IF + C);
+    const totalErrorRate = Math.floor(errorRate * 1000) / 10;
+    console.log(totalErrorRate);
+    const accuracy = 100 - totalErrorRate;
+    return accuracy;
 }
 
-const calcSpeed = (totalTime, userInput) => {
-    const wordsTyped = userInput.innerHTML.split(" ").length;
-    const speed = wordsTyped / totalTime;
-    speedView.innerHTML = `Speed: ${Math.floor(speed)} wpm`;
+const calcSpeed = (totalSeconds, userInput) => {
+    const wordsTyped = userInput.innerHTML.length - 1;
+    const speed = (wordsTyped / totalSeconds) * 60 * (1 / 5);
+    return Math.floor(speed);
 }
 
 const submitInput = (startTime, userInput) => {
     const endTime = new Date();
 
     //total time in minutes
-    const totalTime = ((endTime.getTime() - startTime.getTime()) / 1000) / 60;
+    const totalSeconds = ((endTime.getTime() - startTime.getTime()) / 1000);
 
-    calcSpeed(totalTime, userInput);
-    calcAccuracy(userInput);
+    const wpm = calcSpeed(totalSeconds, userInput);
+    const aer = calcAccuracy(userInput);
 
-    return totalTime;
+    totalSpeed *= phraseCount;
+    totalAccuracy *= phraseCount;
+    
+    totalSpeed += wpm;
+    totalAccuracy += aer;
+
+    phraseCount++;
+    
+    totalSpeed /= phraseCount;
+    totalAccuracy /= phraseCount;
+
+
+    previous.innerHTML = `Sentence: ${Math.floor(wpm)} wpm, ${Math.floor(aer)}% accuracy`;
+    total.innerHTML = `Lesson: ${Math.floor(totalSpeed)} wpm, ${Math.floor(totalAccuracy)}% accuracy`;
 }
 
 loadNewPhrase();
@@ -63,7 +83,7 @@ window.addEventListener("keydown", (event) => {
             break;
         case "Backspace":
             userInput.innerHTML = userInput.innerHTML.slice(0, -1);
-            backspaceCount++;
+            IF++;
             break;
         case "Shift":
             break;
@@ -72,6 +92,8 @@ window.addEventListener("keydown", (event) => {
         case "Control":
             break;
         case "Alt":
+            break;
+        case "Meta":
             break;
         default:
             if (userInput.innerHTML.length < viewPhrase.innerHTML.length) {
