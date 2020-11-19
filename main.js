@@ -58,7 +58,6 @@ const submitInput = (startTime, userInput) => {
     totalSpeed /= phraseCount;
     totalAccuracy /= phraseCount;
 
-
     previous.innerHTML = `Sentence: ${Math.floor(wpm)} wpm, ${Math.floor(aer)}% accuracy`;
     total.innerHTML = `Lesson: ${Math.floor(totalSpeed)} wpm, ${Math.floor(totalAccuracy)}% accuracy`;
 }
@@ -76,6 +75,7 @@ window.addEventListener("keydown", (event) => {
                 submitInput(startTime, userInput);
                 loadNewPhrase();
                 userInput.innerHTML = "";
+                IF = 0;
             }
             break;
         case "Escape":
