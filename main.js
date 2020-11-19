@@ -9,6 +9,33 @@ let totalSpeed = 0;
 let totalAccuracy = 0;
 let phraseCount = 0;
 
+let phrase = "";
+let logs = [];
+
+const log = (key) => {
+
+    switch (key) {
+        case "Backspace":
+            phrase += "←"
+            break;
+        case "Enter":
+            phrase += "↵";
+            phrase += "\r\n";
+            logs.push(phrase);
+            phrase = "";
+            break;
+        default:
+            phrase += key;
+            break;
+    }
+}
+
+const downloadLogs = () => {
+    var file = new File(logs, "session_logs.txt", {type: "text/plain;charset=utf-8"});
+    saveAs(file);
+    logs = [];
+}
+
 const loadNewPhrase = () => {
     let randomIndex = Math.random() * localPhrases.length;
     let phrase = localPhrases.splice(randomIndex, 1);
@@ -27,7 +54,6 @@ const calcAccuracy = (userInput) => {
     }
     const errorRate = (INF + IF) / (INF + IF + C);
     const totalErrorRate = Math.floor(errorRate * 1000) / 10;
-    console.log(totalErrorRate);
     const accuracy = 100 - totalErrorRate;
     return accuracy;
 }
@@ -69,6 +95,7 @@ window.addEventListener("keydown", (event) => {
     if (userInput.innerHTML.length == 0) {
         startTime = new Date();
     }
+    log(event.key);
     switch (event.key) {
         case "Enter":
             if (userInput.innerHTML.length == viewPhrase.innerHTML.length) {
@@ -94,6 +121,9 @@ window.addEventListener("keydown", (event) => {
         case "Alt":
             break;
         case "Meta":
+            break;
+        case "$":
+            downloadLogs();
             break;
         default:
             if (userInput.innerHTML.length < viewPhrase.innerHTML.length) {
